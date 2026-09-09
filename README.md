@@ -7,30 +7,32 @@ learning, and minimum trace reconciliation"*, **Expert Systems With Applications
 
 **Paper:** https://doi.org/10.1016/j.eswa.2026.133273 (open access, CC BY 4.0)
 
-These are the supplementary files as published, unmodified.
+These are the supplementary files exactly as published — unmodified, so the code
+here matches the paper line for line.
 
 ---
 
-## What this does
+## What it does
 
 Forecasts New Zealand residential construction activity across three hierarchies —
-number of consents, gross floor area, and consented capital value — each
-disaggregated into detached houses, townhouses and apartments. Twelve series in
-total: 9 bottom-level and 3 top-level aggregates.
+number of consents, gross floor area, and consented capital value — each split into
+detached houses, townhouses and apartments. Twelve series: 9 typology-level and 3
+top-level aggregates, built from 35 years of monthly building consent data.
 
-Three stages:
+The architecture has three stages:
 
 1. **MSTL** decomposes each series and forecasts trend and seasonality.
-2. **LSTM** learns the non-linear structure left in the MSTL residuals, applied
-   only to the series that failed a Ljung-Box test at lag 12.
-3. **Empirical MinT** reconciliation enforces coherence between bottom and top levels.
+2. **LSTM** learns the non-linear structure left in the MSTL residuals, applied only
+   to the series that failed a Ljung-Box test at lag 12.
+3. **Empirical MinT** reconciliation restores coherence between the typology-level
+   forecasts and their aggregates.
 
-MAE reductions of 23.3–39.7% against the MSTL baseline, and 6.0–28.5% against the
-two-stage MSTL+LSTM hybrid.
+Together that cuts MAE by 23.3–39.7% against the MSTL baseline and 6.0–28.5% against
+the two-stage MSTL+LSTM hybrid.
 
 ## Files
 
-| File | Purpose |
+| File | What it does |
 |---|---|
 | `Script1_Statistical_Modelling.py` | Compares 9 statistical models across all 12 features |
 | `Script2_Residual_Analysis.py` | Ljung-Box tests and residual diagnostics |
@@ -38,11 +40,11 @@ two-stage MSTL+LSTM hybrid.
 | `Script4_All_models_compared.py` | Full pipeline, ablation study, paper figures |
 | `data_9features.xlsx` | Monthly series, 04/1990 – 12/2025 |
 
-Data constructed from Statistics New Zealand's *Regional new dwellings consented*
-release (https://www.stats.govt.nz), accessed 27 November 2025, subject to the
-Stats NZ licence terms.
+Data built from Statistics New Zealand's *Regional new dwellings consented* release
+(https://www.stats.govt.nz), accessed 27 November 2025, subject to the Stats NZ
+licence terms.
 
-## Running
+## Running it
 
 Python 3.12.7.
 
@@ -59,44 +61,39 @@ python Script3_Bayesian_Optimization_for_hybrid_MSTL_LSTM.py
 python Script4_All_models_compared.py
 ```
 
-Script 4 does not depend on Script 3 — the optimal hyperparameters are already
-hardcoded there. Only run Script 3 if you are re-tuning.
+Script 4 doesn't need Script 3 — the tuned hyperparameters are already hardcoded in
+it. Only run Script 3 if you're re-tuning.
 
-## Before you run
+## Things worth knowing first
 
-**Library versions matter.** `statsforecast`, `neuralforecast` and
-`hierarchicalforecast` change APIs between releases. The pinned versions in
-`requirements.txt` are the ones these scripts were written against. In particular,
-`statsforecast` 2.x treats `unique_id` as a column rather than the DataFrame index,
-so a 1.x install will fail immediately.
+**Pin the library versions.** `statsforecast`, `neuralforecast` and
+`hierarchicalforecast` change their APIs between releases. The versions in
+`requirements.txt` are what these scripts were written against. `statsforecast` 2.x
+treats `unique_id` as a column rather than the DataFrame index, and the scripts
+assume that, so a 1.x install fails straight away.
 
-**Script 1 has a known bug.** The heterogeneous-baseline block at the end calls
-`load_and_filter_hierarchy` expecting three return values, but the function returns
-two, raising `ValueError: not enough values to unpack`. To run it, change the return
-statement to `return hier_df.reset_index(), S_df, tags` and indent the block into
-the `if __name__ == "__main__"` guard. This affects only the supplementary
-heterogeneous comparison — the main results are unaffected, and Script 4 is correct
-as published.
+**Script 3 takes hours.** 1,000 Optuna trials × 3 hierarchy groups × 4 folds, each
+one training an LSTM. It also can't resume if you interrupt it.
 
-**Script 3 is slow.** 1,000 trials × 3 hierarchy groups × 4 folds, each training an
-LSTM. Many hours on CPU, and not resumable if interrupted.
+**Expect small numerical drift.** The LSTM is seeded and thread counts are pinned,
+but exact reproducibility in PyTorch still depends on hardware. The published numbers
+came from CPU on Windows.
 
-**Results may drift slightly.** The LSTM is seeded, but full reproducibility in
-PyTorch also depends on hardware. Published results were produced on CPU, Windows.
+**Clear the caches when you change things.** The scripts write joblib caches
+(`sf_cache/` from Scripts 2–4, `statsforecast_cache/` from Script 1). If you modify
+the data or the cross-validation settings without deleting these, you'll silently get
+the old fits back.
 
-**Caching.** The scripts write joblib caches (`sf_cache/`, `statsforecast_cache/`).
-Delete these if you change the data or the cross-validation settings, or stale fits
-will be returned.
-
-**Fonts.** Scripts 2 and 4 set the font to Cambria. On Linux and macOS matplotlib
-falls back to its default and warns. Cosmetic only.
+**Fonts.** Scripts 2 and 4 ask for Cambria, which Linux and macOS usually don't have.
+Matplotlib falls back to its default and warns. Cosmetic only.
 
 ## Limitations
 
-The framework uses endogenous historical data only — no interest rates, material
-costs or population growth. The residual learner is restricted to
-sequence-to-sequence LSTMs. Validation is on New Zealand data only. Section 3.6 of
-the paper covers these in full.
+This uses historical data only — no interest rates, material costs or population
+growth. The residual learner is restricted to sequence-to-sequence LSTMs, so whether
+that stage is optimal is untested. Validation is on New Zealand data alone, so the
+size of the gains elsewhere is an open question. Section 3.6 of the paper goes
+through all of this properly.
 
 ## Citing
 
@@ -123,9 +120,12 @@ Code: MIT. Paper: CC BY 4.0. Data: subject to the Statistics New Zealand licence
 Gerasimos Christoforatos — gc243@students.waikato.ac.nz
 School of Engineering, University of Waikato, Hamilton, New Zealand
 
+Questions, problems running it, or if you've applied the framework somewhere else —
+open an issue or get in touch.
+
 ## Acknowledgements
 
 Funded by the New Zealand Ministry of Business, Innovation and Employment under the
 Āmiomio Aotearoa project (UOWX2004, University of Waikato) and the Building Research
-Levy. Built on the Nixtla `statsforecast`, `neuralforecast` and
-`hierarchicalforecast` libraries.
+Levy. Built on the Nixtla `statsforecast`, `neuralforecast` and `hierarchicalforecast`
+libraries.
