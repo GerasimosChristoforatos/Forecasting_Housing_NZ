@@ -1,0 +1,56 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "Hierarchical Forecasting of Residential Construction Activity (MSTL-LSTM-MinT)"
+abstract: >-
+  Reference implementation of a three-stage hierarchical forecasting architecture
+  combining MSTL seasonal-trend decomposition, LSTM deep residual learning, and
+  empirical minimum trace reconciliation, applied to 35 years of New Zealand
+  building consent data across three hierarchies (consents, gross floor area,
+  capital value) and three building typologies.
+type: software
+license: MIT
+repository-code: "https://github.com/GerasimosChristoforatos/Forecasting_Housing_NZ"
+url: "https://doi.org/10.1016/j.eswa.2026.133273"
+date-released: "2026-09-10"
+authors:
+  - family-names: Christoforatos
+    given-names: Gerasimos
+    email: gc243@students.waikato.ac.nz
+    affiliation: "School of Engineering, University of Waikato, Hamilton, New Zealand"
+  - family-names: Pickering
+    given-names: Kim
+    email: kim.pickering@waikato.ac.nz
+    affiliation: "School of Engineering, University of Waikato, Hamilton, New Zealand"
+keywords:
+  - hierarchical forecasting
+  - forecast reconciliation
+  - minimum trace
+  - MSTL
+  - LSTM
+  - residual learning
+  - time series
+  - residential construction
+  - building consents
+  - New Zealand
+
+preferred-citation:
+  type: article
+  title: >-
+    Hierarchical forecasting of residential construction activity: a three-stage
+    architecture combining seasonal-trend decomposition, deep residual learning,
+    and minimum trace reconciliation
+  authors:
+    - family-names: Christoforatos
+      given-names: Gerasimos
+      affiliation: "School of Engineering, University of Waikato, Hamilton, New Zealand"
+    - family-names: Pickering
+      given-names: Kim
+      affiliation: "School of Engineering, University of Waikato, Hamilton, New Zealand"
+  journal: "Expert Systems With Applications"
+  volume: 331
+  start: 133273
+  year: 2026
+  month: 6
+  doi: "10.1016/j.eswa.2026.133273"
+  publisher:
+    name: Elsevier
