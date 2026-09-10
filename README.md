@@ -1,4 +1,4 @@
-# Hierarchical Forecasting of Residential Construction Activity
+# Three-stage hierarchical forecasting architecture using MSTL, residual learning (LSTM), and empirical MinT: applied in New Zealand's residential sector
 
 Code and data for *"Hierarchical forecasting of residential construction activity:
 a three-stage architecture combining seasonal-trend decomposition, deep residual
