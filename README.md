@@ -11,8 +11,7 @@ learning, and minimum trace reconciliation"*, **Expert Systems With Applications
 
 ## Application
 
-The script was developed to forecast New Zealand's residential construction activity across three hierarchies (
-number of consents, gross floor area, and consented capital value ) each split into
+The script was developed to forecast New Zealand's residential construction activity across three hierarchies (number of consents, gross floor area, and consented capital value) each split into
 detached houses, townhouses and apartments. Total time-series: 12 (9 typology-level and 3
 top-level aggregates). The dataset is built from 35 years of monthly building consent data.
 
