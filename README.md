@@ -109,8 +109,7 @@ Code: MIT. Paper: CC BY 4.0. Data: subject to the Statistics New Zealand licence
 
 ## Contact
 
-Gerasimos Christoforatos — gc243@students.waikato.ac.nz / gerasimos.christoforatos@waikato.ac.nz / gerr.christof@gmail.com
-School of Engineering, University of Waikato, Hamilton, New Zealand
+Gerasimos Christoforatos — gerr.christof@gmail.com
 
 ## Acknowledgements
 
