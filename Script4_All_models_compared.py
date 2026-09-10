@@ -852,8 +852,7 @@ if __name__ == "__main__":
     sorted_df = metrics_df.sort_values(['Group', 'Level', 'Feature', 'MAE'], ascending=[True, False, True, True])
     for _, row in sorted_df.iterrows():
         print(f"{row['Group']:<10} | {row['Level']:<8} | {row['Feature']:<25} | {row['Model']:<20} | {row['MAE']:>10.2f} | {row['RMSE']:>10.2f} | {row['MSE']:>12.2f} | {row['sMAPE']:>9.2f}% | {row['rMAE']:>10.4f}")
-# Add this line around line 430 in Script4:
-    full_cv_df.to_csv('full_cv_reconciled.csv', index=False)
+
     excel_export_path = 'Evaluation_Merged_LSTM_EMinT_Final.xlsx'
     print(f"\nSaving metrics to file: '{excel_export_path}'...")
 
